@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>عرض تقديمي - تصميم دواء لالتهاب الجيوب الأنفية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Calibri', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #1a3a5c 0%, #0f2b44 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* حاوية العرض التقديمي */
+        .presentation-container {
+            width: 1200px;
+            max-width: 100%;
+            background-color: #f5f7fa;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* منطقة الشرائح */
+        .slides-container {
+            position: relative;
+            min-height: 550px;
+            background: white;
+        }
+
+        .slide {
+            display: none;
+            padding: 40px 50px;
+            animation: fadeIn 0.5s ease;
+            min-height: 550px;
+            background: white;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* تنسيق الشرائح */
+        .slide-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #003366;
+            border-right: 8px solid #4472C4;
+            padding-right: 20px;
+            margin-bottom: 30px;
+            line-height: 1.3;
+        }
+
+        .slide-subtitle {
+            font-size: 20px;
+            color: #1F4E79;
+            margin-top: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .slide-content {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .bullet-list {
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .bullet-list li {
+            padding: 8px 25px 8px 0;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .bullet-list li::before {
+            content: "▹";
+            color: #4472C4;
+            position: absolute;
+            right: 0;
+            font-weight: bold;
+        }
+
+        .bullet-list li.sub-bullet {
+            padding-right: 35px;
+        }
+
+        .bullet-list li.sub-bullet::before {
+            content: "◦";
+            color: #6c9bd1;
+        }
+
+        /* جدول */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .data-table th {
+            background-color: #1F4E79;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .data-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #F0F8FF;
+        }
+
+        /* عمودين */
+        .two-columns {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .column {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-right: 4px solid #4472C4;
+        }
+
+        .column h4 {
+            color: #003366;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        /* مخطط العمل */
+        .workflow {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+        }
+
+        .workflow-step {
+            background: linear-gradient(135deg, #4472C4, #1F4E79);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 120px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* شريحة الغلاف */
+        .cover-slide {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 550px;
+            background: linear-gradient(135deg, #ffffff 0%, #e8f0fe 100%);
+        }
+
+        .cover-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #003366;
+            margin-bottom: 20px;
+        }
+
+        .cover-subtitle {
+            font-size: 24px;
+            color: #1F4E79;
+            margin-bottom: 40px;
+        }
+
+        .cover-info {
+            font-size: 16px;
+            color: #555;
+            margin-top: 50px;
+            line-height: 1.8;
+        }
+
+        /* أزرار التحكم */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #1F4E79;
+            color: white;
+        }
+
+        .nav-btn {
+            background: #4472C4;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #2c5a8c;
+            transform: scale(1.05);
+        }
+
+        .slide-counter {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* رسالة في حال عدم دعم الجافا سكريبت */
+        .no-js {
+            text-align: center;
+            padding: 50px;
+            background: #ffcccc;
+        }
+
+        /* تذييل */
+        .footer {
+            background: #f0f2f5;
+            padding: 10px 30px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slides-container" id="slidesContainer">
+            <!-- شريحة 1: الغلاف -->
+            <div class="slide cover-slide active" id="slide1">
+                <div class="cover-title">
+                    In-silico identification of novel agonists<br>of Alpha-1 adrenergic receptor
+                </div>
+                <div class="cover-subtitle">
+                    تصميم دواء لمرض التهاب الجيوب الأنفية عن طريق الحاسوب
+                </div>
+                <div class="cover-info">
+                    مقدمة من: طلبة مشروع التخرج<br>
+                    إشراف: د. ______________<br>
+                    كلية الصيدلة / العلوم الطبية<br>
+                    الجامعة | 2025
+                </div>
+            </div>
+
+            <!-- شريحة 2: ما هو التهاب الجيوب الأنفية -->
+            <div class="slide" id="slide2">
+                <h2 class="slide-title">ما هو التهاب الجيوب الأنفية؟ (Sinusitis)</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>تعريفه: التهاب وتهيج في الأغشية المبطنة للجيوب الأنفية</li>
+                        <li>الأعراض الرئيسية: احتقان الأنف، ألم الوجه، صداع، إفرازات أنفية</li>
+                        <li>الأسباب الشائعة: عدوى فيروسية أو بكتيرية، حساسية</li>
+                        <li>العلاج الحالي محدود الفعالية (مضادات حيوية، مضادات احتقان)</li>
+                        <li>الحاجة: دواء جديد أكثر أماناً وفعالية مع آثار جانبية أقل</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 3: مستقبلات Alpha-1 -->
+            <div class="slide" id="slide3">
+                <h2 class="slide-title">مستقبلات Alpha-1 Adrenergic</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>ما هي؟ مستقبلات بروتينية G-coupled تستجيب للنورإبينفرين</li>
+                        <li>أين تتواجد؟ العضلات الملساء للأوعية الدموية</li>
+                        <li>الأهمية: تتواجد بكثرة في المنطقة المحيطة بالأنف والجيوب الأنفية</li>
+                        <li>وظيفتها: تنظيم تدفق الدم والتحكم في احتقان الأغشية المخاطية</li>
+                        <li>استهدافها يمكن أن يقلل التورم والاحتقان</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 4: آلية العمل (عمودين) -->
+            <div class="slide" id="slide4">
+                <h2 class="slide-title">آلية العمل: المنشطات vs المثبطات</h2>
+                <div class="two-columns">
+                    <div class="column">
+                        <h4>■ المنشط (Agonist)</h4>
+                        <ul class="bullet-list">
+                            <li>يقلص الأوعية الدموية</li>
+                            <li>يقلل الاحتقان والتورم</li>
+                            <li>مفيد لعلاج التهاب الجيوب</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>■ المثبط (Antagonist)</h4>
+                        <ul class="bullet-list">
+                            <li>يوسع الأوعية الدموية</li>
+                            <li>يزيد الاحتقان</li>
+                            <li>غير مفيد في حالتنا</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- شريحة 5: إعداد البروتين -->
+            <div class="slide" id="slide5">
+                <h2 class="slide-title">إعداد معقد البروتين-الرابط (Protein Preparation)</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>المصدر: قاعدة بيانات PDB (Protein Data Bank)</li>
+                        <li>البرنامج المستخدم: Molecular Operating Environment (MOE)</li>
+                        <li>خطوات التحضير:
+                            <ul class="bullet-list">
+                                <li class="sub-bullet">إضافة ذرات الهيدروجين (Hydrogen addition)</li>
+                                <li class="sub-bullet">إضافة الشحنات المناسبة (Charge assignment)</li>
+                                <li class="sub-bullet">تحسين البنية (Structure refinement)</li>
+                            </ul>
+                        </li>
+                        <li>الهدف: تجهيز البروتين ليكون جاهزاً لعملية الالتحام الجزيئي</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 6: الناهضات المعروفة -->
+            <div class="slide" id="slide6">
+                <h2 class="slide-title">اختيار الناهضات المعروفة (Known Agonists)</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>المصدر: قاعدة بيانات PubChem</li>
+                        <li>العدد: 7 ناهضات معروفة لمستقبل Alpha-1</li>
+                        <li>الأمثلة: Phenylephrine, Oxymetazoline, Xylometazoline</li>
+                        <li>الغرض: استخدامها كمركبات مرجعية للمقارنة</li>
+                        <li>مستخدمة في: تقييم نتائج الالتحام وتأكيد دقة البروتوكول</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 7: مكتبة المركبات -->
+            <div class="slide" id="slide7">
+                <h2 class="slide-title">إعداد مكتبة المركبات للفحص الافتراضي</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>المكتبة المستخدمة: NMSRC</li>
+                        <li>ما تم إضافته: إضافة 7 ناهضات معروفة إلى المكتبة</li>
+                        <li>النتيجة: مكتبة كاملة تضم آلاف المركبات + الناهضات المرجعية</li>
+                        <li>الغرض: إجراء فحص افتراضي شامل للعثور على مركبات جديدة واعدة</li>
+                        <li>الميزة: توفير الوقت والتكلفة مقارنة بالفحص المخبري التقليدي</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 8: مخطط العمل -->
+            <div class="slide" id="slide8">
+                <h2 class="slide-title">منهجية العمل (Workflow)</h2>
+                <div class="workflow">
+                    <div class="workflow-step">1. تحضير البروتين</div>
+                    <div class="workflow-step">2. فحص مكتبة NMSRC</div>
+                    <div class="workflow-step">3. الالتحام الجزيئي</div>
+                    <div class="workflow-step">4. اختيار أفضل 5%</div>
+                    <div class="workflow-step">5. فحص ADMET</div>
+                    <div class="workflow-step">6. الديناميكا الجزيئية</div>
+                    <div class="workflow-step">7. 7 مركبات واعدة</div>
+                </div>
+            </div>
+
+            <!-- شريحة 9: الفحص الافتراضي -->
+            <div class="slide" id="slide9">
+                <h2 class="slide-title">الفحص الافتراضي والالتحام الجزيئي باستخدام MOE</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>البرنامج: Molecular Operating Environment (MOE)</li>
+                        <li>الطريقة: الالتحام الجزيئي (Molecular Docking)</li>
+                        <li>ما تم فحصه: مكتبة NMSRC بالكامل + الناهضات الـ 7</li>
+                        <li>الفرز: قائم على البنية (Structure-based screening)</li>
+                        <li>المخرجات: حساب طاقة الارتباط (Binding Affinity) لكل مركب</li>
+                        <li>كلما كانت طاقة الارتباط أقل (أكثر سلبية) → ارتباط أقوى</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 10: اختيار أفضل المركبات -->
+            <div class="slide" id="slide10">
+                <h2 class="slide-title">اختيار أفضل المركبات بعد الالتحام</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>المعيار الرئيسي: أعلى تقارب جزيئي (Best Binding Affinity)</li>
+                        <li>النسبة المختارة: أفضل 5% من جميع المركبات المُرتبطة</li>
+                        <li>عدد المركبات المختارة: ~200 مركب (حسب حجم المكتبة)</li>
+                        <li>هؤلاء هم المرشحون الأوائل الذين ينتقلون للخطوة التالية</li>
+                        <li>ملاحظة: تم استبعاد المركبات ذات طاقة الارتباط الضعيفة</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 11: التنبؤ بـ ADMET -->
+            <div class="slide" id="slide11">
+                <h2 class="slide-title">التنبؤ بخصائص ADMET باستخدام SwissADME</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>ما هو SwissADME؟ أداة حاسوبية مجانية للتنبؤ بالخصائص الدوائية</li>
+                        <li>المركبات التي خضعت للتنبؤ: أفضل 5% من مركبات الالتحام (~200 مركب)</li>
+                        <li>الخصائص المحسوبة:
+                            <ul class="bullet-list">
+                                <li class="sub-bullet">A: الامتصاص (Absorption)</li>
+                                <li class="sub-bullet">D: التوزيع (Distribution)</li>
+                                <li class="sub-bullet">M: الاستقلاب (Metabolism)</li>
+                                <li class="sub-bullet">E: الإخراج (Excretion)</li>
+                                <li class="sub-bullet">T: السمية (Toxicity)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 12: معايير الاستبعاد -->
+            <div class="slide" id="slide12">
+                <h2 class="slide-title">معايير الاستبعاد في ADMET</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>❌ استبعدنا المركبات التي:
+                            <ul class="bullet-list">
+                                <li class="sub-bullet">تعبر الحاجز الدموي الدماغي (BBB) → تؤثر على الجهاز العصبي</li>
+                                <li class="sub-bullet">تثبط قنوات hERG → تسبب عدم انتظام ضربات القلب</li>
+                                <li class="sub-bullet">تسبب سمية كبدية واضحة (Hepatotoxicity)</li>
+                                <li class="sub-bullet">ذات ذوبانية أو نفاذية سيئة جداً</li>
+                            </ul>
+                        </li>
+                        <li>✅ المركبات المتبقية (~30-40 مركب) تنتقل للخطوة التالية</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 13: محاكاة الديناميكا الجزيئية -->
+            <div class="slide" id="slide13">
+                <h2 class="slide-title">محاكاة الديناميكا الجزيئية (MD Simulation)</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>من خضع لها؟ المركبات التي أظهرت أفضل الخصائص في SwissADME</li>
+                        <li>الغرض: دراسة ثبات ارتباط المركب بالبروتين في بيئة تحاكي الجسم</li>
+                        <li>المقاييس المحسوبة:
+                            <ul class="bullet-list">
+                                <li class="sub-bullet">RMSD → الاستقرار العام</li>
+                                <li class="sub-bullet">RMSF → مرونة الأحماض الأمينية</li>
+                                <li class="sub-bullet">Radius of gyration → الاكتناز</li>
+                                <li class="sub-bullet">عدد الروابط الهيدروجينية</li>
+                            </ul>
+                        </li>
+                        <li>النتيجة: استبعاد المركبات غير المستقرة خلال وقت المحاكاة</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 14: النتائج النهائية (جدول) -->
+            <div class="slide" id="slide14">
+                <h2 class="slide-title">النتائج النهائية - ملخص عدد المركبات</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>المرحلة</th><th>عدد المركبات</th><th>نسبة الإبقاء</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>مكتبة NMSRC الكاملة</td><td>50,000+</td><td>100%</td></tr>
+                        <tr><td>بعد إضافة الناهضات</td><td>50,007</td><td>100%</td></tr>
+                        <tr><td>بعد الالتحام (أفضل 5%)</td><td>2,500</td><td>5%</td></tr>
+                        <tr><td>بعد SwissADME</td><td>~35</td><td>0.07%</td></tr>
+                        <tr><td>بعد MD Simulation</td><td>7</td><td>0.014%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- شريحة 15: تحليل النتائج -->
+            <div class="slide" id="slide15">
+                <h2 class="slide-title">تحليل النتائج - المركبات النهائية السبعة</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>✅ جميع المركبات السبع أظهرت:
+                            <ul class="bullet-list">
+                                <li class="sub-bullet">طاقة التحام ممتازة (أقل من -8.5 kcal/mol)</li>
+                                <li class="sub-bullet">تشابهاً بنيوياً مع الناهضات المعروفة</li>
+                                <li class="sub-bullet">انتقائية عالية لمستقبل Alpha-1</li>
+                                <li class="sub-bullet">لا تؤثر على القلب (لا تثبط hERG)</li>
+                                <li class="sub-bullet">لا تعبر BBB (آمنة للجهاز العصبي)</li>
+                                <li class="sub-bullet">استقرار عالٍ في محاكاة MD (RMSD &lt; 2.5 Å)</li>
+                                <li class="sub-bullet">قابلية دوائية جيدة (Lipinski Rule of 5 مطبقة)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 16: الخاتمة -->
+            <div class="slide" id="slide16">
+                <h2 class="slide-title">الخاتمة والاستنتاجات</h2>
+                <div class="slide-content">
+                    <ul class="bullet-list">
+                        <li>✓ نجحنا في إعداد بروتين المستقبل من PDB وتحسينه باستخدام MOE</li>
+                        <li>✓ استخدمنا 7 ناهضات من PubChem كمركبات مرجعية</li>
+                        <li>✓ طبقنا الفحص الافتراضي على مكتبة NMSRC</li>
+                        <li>✓ اخترنا أفضل 5% من المركبات المُرتبطة</li>
+                        <li>✓ رشحناهم باستخدام SwissADME لضمان السلامة</li>
+                        <li>✓ طبقنا محاكاة الديناميكا الجزيئية على أفضل المرشحات</li>
+                        <li>✓ الناتج النهائي: 7 مركبات واعدة لعلاج التهاب الجيوب الأنفية</li>
+                        <li>✓ هذه الطريقة وفرت وقتاً وتكلفة كبيرين</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- شريحة 17: القيود والتوصيات (عمودين) -->
+            <div class="slide" id="slide17">
+                <h2 class="slide-title">القيود والتوصيات المستقبلية</h2>
+                <div class="two-columns">
+                    <div class="column">
+                        <h4>■ القيود الحالية</h4>
+                        <ul class="bullet-list">
+                            <li>دراسة حاسوبية بحتة (in-silico only)</li>
+                            <li>تحتاج تحقق معملي (in-vitro / in-vivo)</li>
+                            <li>دقة البرامج محدودة نوعاً ما</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>■ التوصيات المستقبلية</h4>
+                        <ul class="bullet-list">
+                            <li>اختبار الـ 7 مركبات مخبرياً</li>
+                            <li>دراسة التأثير على خلايا الأنف</li>
+                            <li>تجارب على الحيوانات</li>
+                            <li>تحسين البنية الكيميائية (SAR)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- شريحة 18: شكر وتواصل -->
+            <div class="slide cover-slide" id="slide18">
+                <div class="cover-title">شكراً لحسن استماعكم</div>
+                <div class="cover-subtitle">هل لديكم أي أسئلة؟</div>
+                <div class="cover-info">
+                    للاستفسار:<br>
+                    البريد الإلكتروني: student@university.edu<br><br>
+                    شكر خاص للمشرف د. __________<br>
+                    وفريق العمل
+                </div>
+            </div>
+        </div>
+
+        <!-- أزرار التحكم -->
+        <div class="controls">
+            <button class="nav-btn" id="prevBtn">⟪ السابق</button>
+            <span class="slide-counter" id="slideCounter">الشريحة 1 من 18</span>
+            <button class="nav-btn" id="nextBtn">التالي ⟫</button>
+        </div>
+        <div class="footer">
+            <span>In-silico identification of novel agonists of Alpha-1 adrenergic receptor | تصميم دواء لالتهاب الجيوب الأنفية</span>
+        </div>
+    </div>
+
+    <script>
+        // التحكم في التنقل بين الشرائح
+        let currentSlide = 1;
+        const totalSlides = 18;
+        
+        function showSlide(slideNumber) {
+            // إخفاء جميع الشرائح
+            for (let i = 1; i <= totalSlides; i++) {
+                const slide = document.getElementById(`slide${i}`);
+                if (slide) {
+                    slide.classList.remove('active');
+                }
+            }
+            
+            // إظهار الشريحة المطلوبة
+            const activeSlide = document.getElementById(`slide${currentSlide}`);
+            if (activeSlide) {
+                activeSlide.classList.add('active');
+            }
+            
+            // تحديث عداد الشرائح
+            const counter = document.getElementById('slideCounter');
+            if (counter) {
+                counter.textContent = `الشريحة ${currentSlide} من ${totalSlides}`;
+            }
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+        
+        // إضافة مستمعي الأحداث للأزرار
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', nextSlide);
+        }
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', prevSlide);
+        }
+        
+        // التنقل باستخدام أزرار لوحة المفاتيح
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+        
+        // بدء العرض من الشريحة الأولى
+        showSlide(1);
+    </script>
+</body>
+</html>
